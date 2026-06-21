@@ -1,7 +1,7 @@
 // Kiro completion spec for Salesforce CLI (sf)
 // Generated from: sf commands --json
-// SF CLI version: 2.136.8
-// Spec version:   2.136.8
+// SF CLI version: 2.139.6
+// Spec version:   2.139.6
 //
 // Installation:
 //   Copy sf.js to your Kiro Specs folder
@@ -78,6 +78,516 @@ const completionSpec = {
               args: {
                 name: "version"
               }
+            }
+          ]
+        },
+        {
+          name: "adl",
+          subcommands: [
+            {
+              name: "create",
+              description: "Create an Agentforce Data Library.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--name",
+                    "-n"
+                  ],
+                  description: "Display name for the data library (max 80 characters).",
+                  args: {
+                    name: "name"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--developer-name",
+                  description: "API name for the data library (max 80 characters, alphanumeric and underscores only, must start with a letter).",
+                  args: {
+                    name: "developer-name"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--source-type",
+                  description: "Type of grounding source: sfdrive (file upload), knowledge (Salesforce Knowledge articles), or retriever (existing active Custom Retriever).",
+                  args: {
+                    name: "source-type",
+                    suggestions: [
+                      "sfdrive",
+                      "knowledge",
+                      "retriever"
+                    ]
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--description",
+                  description: "Description of the data library (max 255 characters).",
+                  args: {
+                    name: "description"
+                  }
+                },
+                {
+                  name: "--index-mode",
+                  description: "Index mode for SFDRIVE libraries: basic or enhanced.",
+                  args: {
+                    name: "index-mode",
+                    suggestions: [
+                      "basic",
+                      "enhanced"
+                    ]
+                  }
+                },
+                {
+                  name: "--retriever-id",
+                  description: "ID of an active Custom Retriever (required for RETRIEVER source type; retriever must be active).",
+                  args: {
+                    name: "retriever-id"
+                  }
+                },
+                {
+                  name: "--primary-index-field1",
+                  description: "Primary index field 1 for KNOWLEDGE libraries (required, immutable after creation).",
+                  args: {
+                    name: "primary-index-field1"
+                  }
+                },
+                {
+                  name: "--primary-index-field2",
+                  description: "Primary index field 2 for KNOWLEDGE libraries (required, immutable after creation).",
+                  args: {
+                    name: "primary-index-field2"
+                  }
+                }
+              ]
+            },
+            {
+              name: "delete",
+              description: "Delete an Agentforce Data Library.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--library-id",
+                    "-i"
+                  ],
+                  description: "Agentforce Data Library ID (18-char Salesforce ID with prefix 1JD).",
+                  args: {
+                    name: "library-id"
+                  },
+                  isRequired: true
+                }
+              ]
+            },
+            {
+              name: "file",
+              subcommands: [
+                {
+                  name: "add",
+                  description: "Add files to an existing Agentforce Data Library.",
+                  options: [
+                    {
+                      name: [
+                        "--target-org",
+                        "-o"
+                      ],
+                      description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                      args: {
+                        name: "target-org",
+                        generators: orgGenerator
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--api-version",
+                      description: "Override the api version used for api requests made by this command",
+                      args: {
+                        name: "api-version"
+                      }
+                    },
+                    {
+                      name: [
+                        "--library-id",
+                        "-i"
+                      ],
+                      description: "Agentforce Data Library ID (18-char Salesforce ID with prefix 1JD).",
+                      args: {
+                        name: "library-id"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: [
+                        "--path",
+                        "-f"
+                      ],
+                      description: "Path to file(s) to add. Specify multiple times for batch upload.",
+                      args: {
+                        name: "path",
+                        template: "filepaths",
+                        isVariadic: true
+                      },
+                      isRequired: true
+                    }
+                  ]
+                },
+                {
+                  name: "delete",
+                  description: "Delete a file from an Agentforce Data Library.",
+                  options: [
+                    {
+                      name: [
+                        "--target-org",
+                        "-o"
+                      ],
+                      description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                      args: {
+                        name: "target-org",
+                        generators: orgGenerator
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--api-version",
+                      description: "Override the api version used for api requests made by this command",
+                      args: {
+                        name: "api-version"
+                      }
+                    },
+                    {
+                      name: [
+                        "--library-id",
+                        "-i"
+                      ],
+                      description: "Agentforce Data Library ID (18-char Salesforce ID with prefix 1JD).",
+                      args: {
+                        name: "library-id"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--file-id",
+                      description: "ID of the file to delete (AiGroundingFileRef record ID).",
+                      args: {
+                        name: "file-id"
+                      },
+                      isRequired: true
+                    }
+                  ]
+                },
+                {
+                  name: "list",
+                  description: "List files in an Agentforce Data Library.",
+                  options: [
+                    {
+                      name: [
+                        "--target-org",
+                        "-o"
+                      ],
+                      description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                      args: {
+                        name: "target-org",
+                        generators: orgGenerator
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--api-version",
+                      description: "Override the api version used for api requests made by this command",
+                      args: {
+                        name: "api-version"
+                      }
+                    },
+                    {
+                      name: [
+                        "--library-id",
+                        "-i"
+                      ],
+                      description: "Agentforce Data Library ID (18-char Salesforce ID with prefix 1JD).",
+                      args: {
+                        name: "library-id"
+                      },
+                      isRequired: true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "get",
+              description: "Get details of an Agentforce Data Library.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--library-id",
+                    "-i"
+                  ],
+                  description: "Agentforce Data Library ID (18-char Salesforce ID with prefix 1JD).",
+                  args: {
+                    name: "library-id"
+                  },
+                  isRequired: true
+                }
+              ]
+            },
+            {
+              name: "list",
+              description: "List Agentforce Data Libraries in an org.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: "--source-type",
+                  description: "Filter by source type: sfdrive, knowledge, or retriever.",
+                  args: {
+                    name: "source-type",
+                    suggestions: [
+                      "sfdrive",
+                      "knowledge",
+                      "retriever"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              name: "status",
+              description: "Get indexing status of an Agentforce Data Library.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--library-id",
+                    "-i"
+                  ],
+                  description: "Agentforce Data Library ID (18-char Salesforce ID with prefix 1JD).",
+                  args: {
+                    name: "library-id"
+                  },
+                  isRequired: true
+                }
+              ]
+            },
+            {
+              name: "update",
+              description: "Update an Agentforce Data Library.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--library-id",
+                    "-i"
+                  ],
+                  description: "Agentforce Data Library ID (18-char Salesforce ID with prefix 1JD).",
+                  args: {
+                    name: "library-id"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: [
+                    "--name",
+                    "-n"
+                  ],
+                  description: "New display name for the data library (max 80 characters).",
+                  args: {
+                    name: "name"
+                  }
+                },
+                {
+                  name: "--description",
+                  description: "New description for the data library (max 255 characters).",
+                  args: {
+                    name: "description"
+                  }
+                },
+                {
+                  name: "--content-fields",
+                  description: "Comma-separated list of content fields for KNOWLEDGE libraries (triggers re-indexing).",
+                  args: {
+                    name: "content-fields"
+                  }
+                },
+                {
+                  name: "--restrict-to-public-articles",
+                  description: "Restrict to public Knowledge articles only (KNOWLEDGE libraries, triggers re-indexing)."
+                },
+                {
+                  name: "--retriever-id",
+                  description: "Swap the retriever for a RETRIEVER library (must be an active Custom Retriever ID).",
+                  args: {
+                    name: "retriever-id"
+                  }
+                }
+              ]
+            },
+            {
+              name: "upload",
+              description: "Upload a file to an SFDRIVE Agentforce Data Library.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--library-id",
+                    "-i"
+                  ],
+                  description: "Agentforce Data Library ID (18-char Salesforce ID with prefix 1JD).",
+                  args: {
+                    name: "library-id"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: [
+                    "--file",
+                    "-f"
+                  ],
+                  description: "Path to the file to upload.",
+                  args: {
+                    name: "file",
+                    template: "filepaths",
+                    isVariadic: true
+                  },
+                  isRequired: true
+                },
+                {
+                  name: [
+                    "--wait",
+                    "-w"
+                  ],
+                  description: "Number of minutes to wait for indexing to complete. If not specified, returns after triggering indexing.",
+                  args: {
+                    name: "wait"
+                  }
+                }
+              ]
             }
           ]
         },
@@ -806,11 +1316,22 @@ const completionSpec = {
                 },
                 {
                   name: "--preview",
-                  description: "Preview the test metadata file (AiEvaluationDefinition) without deploying to your org."
+                  description: "Preview the test metadata file without deploying to your org."
                 },
                 {
                   name: "--force-overwrite",
                   description: "Don't prompt for confirmation when overwriting an existing test (based on API name) in your org."
+                },
+                {
+                  name: "--test-runner",
+                  description: "Explicitly specify which test runner to use (agentforce-studio or testing-center).",
+                  args: {
+                    name: "test-runner",
+                    suggestions: [
+                      "agentforce-studio",
+                      "testing-center"
+                    ]
+                  }
                 }
               ]
             },
@@ -4963,6 +5484,13 @@ const completionSpec = {
                   args: {
                     name: "device-id"
                   }
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
                 }
               ]
             },
@@ -5010,14 +5538,14 @@ const completionSpec = {
             },
             {
               name: "site",
-              description: "[Beta] Preview an Experience Builder site locally and in real-time, without deploying it.",
+              description: "Preview an Experience Builder site locally and in real-time, without deploying it.",
               options: [
                 {
                   name: [
                     "--name",
                     "-n"
                   ],
-                  description: "Name of the Experience Builder site to preview. It has to match a site name from the current org.",
+                  description: "Name of the Experience Builder site to preview. It must match a site name from the current org.",
                   args: {
                     name: "name"
                   }
@@ -5035,11 +5563,11 @@ const completionSpec = {
                   isRequired: true
                 },
                 {
-                  name: [
-                    "--get-latest",
-                    "-l"
-                  ],
-                  description: "Download the latest version of the specified site from your org, instead of using any local cache."
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
                 }
               ]
             }
@@ -6918,7 +7446,7 @@ const completionSpec = {
           subcommands: [
             {
               name: "agent",
-              description: "Open an agent in your org's Agent Builder UI in a browser.",
+              description: "Open an agent in your org's Agentforce Builder UI in a browser.",
               options: [
                 {
                   name: [
@@ -6944,14 +7472,14 @@ const completionSpec = {
                     "--api-name",
                     "-n"
                   ],
-                  description: "API name, also known as developer name, of the agent you want to open in the org's Agent Builder UI.",
+                  description: "API name, also known as developer name, of the agent you want to open in the org's Agentforce Builder UI.",
                   args: {
                     name: "api-name"
                   }
                 },
                 {
                   name: "--private",
-                  description: "Open the org in the default browser using private (incognito) mode."
+                  description: "Open the agent in the default browser using private (incognito) mode."
                 },
                 {
                   name: [
@@ -6977,14 +7505,14 @@ const completionSpec = {
                 },
                 {
                   name: "--authoring-bundle",
-                  description: "API name of the agent to open in Agentforce Builder.",
+                  description: "API name of the agent's authoring bundle to open in Agentforce Builder.",
                   args: {
                     name: "authoring-bundle"
                   }
                 },
                 {
                   name: "--version",
-                  description: "Version number of the agent to open in Agentforce Builder.",
+                  description: "Version number of the agent to open in Agentforce Builder. If not specified, the highest version is opened by default.",
                   args: {
                     name: "version"
                   }
