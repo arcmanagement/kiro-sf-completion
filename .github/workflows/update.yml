@@ -1,0 +1,80 @@
+name: Update spec
+
+on:
+  schedule:
+    - cron: '0 6 * * *'   # 毎日 UTC 6:00 (JST 15:00)
+  workflow_dispatch:        # 手動実行も可能
+
+jobs:
+  check-and-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Get latest sf CLI version from npm
+        id: version
+        run: |
+          LATEST=$(npm view @salesforce/cli version)
+          echo "sf_version=$LATEST" >> "$GITHUB_OUTPUT"
+          echo "Detected sf CLI version: $LATEST"
+
+      - name: Check if already released
+        id: check
+        run: |
+          if git tag | grep -qx "v${{ steps.version.outputs.sf_version }}"; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "v${{ steps.version.outputs.sf_version }} is already released. Skipping."
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "v${{ steps.version.outputs.sf_version }} is new. Generating spec."
+          fi
+
+      - name: Install sf CLI
+        if: steps.check.outputs.skip == 'false'
+        run: npm install -g "@salesforce/cli@${{ steps.version.outputs.sf_version }}"
+
+      - name: Generate sf.js
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          sf commands --json 2>/dev/null | grep -v '^\[config\]' > /tmp/sf_commands_clean.json
+          python3 scripts/generate.py \
+            --sf-version "${{ steps.version.outputs.sf_version }}" \
+            --input /tmp/sf_commands_clean.json \
+            --output sf.js
+
+      - name: Update package.json version
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          python3 - << 'EOF'
+          import json
+          d = json.load(open('package.json'))
+          d['version'] = '${{ steps.version.outputs.sf_version }}'
+          open('package.json', 'w').write(json.dumps(d, indent=2) + '\n')
+          EOF
+
+      - name: Create Pull Request
+        if: steps.check.outputs.skip == 'false'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: update/sf-${{ steps.version.outputs.sf_version }}
+          title: "sf ${{ steps.version.outputs.sf_version }}"
+          body: |
+            Auto-generated from Salesforce CLI v${{ steps.version.outputs.sf_version }}.
+
+            - `sf.js` regenerated via `sf commands --json` in a clean CI environment
+            - `package.json` version updated to `${{ steps.version.outputs.sf_version }}`
+
+            Merging this PR will automatically create the GitHub Release.
+          commit-message: "sf ${{ steps.version.outputs.sf_version }}"
+          labels: automated
