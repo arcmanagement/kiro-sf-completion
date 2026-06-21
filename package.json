@@ -1,0 +1,11 @@
+{
+  "name": "kiro-sf-completion",
+  "version": "2.136.8",
+  "description": "Kiro completion spec for Salesforce CLI (sf) — auto-generated from sf commands --json",
+  "keywords": ["kiro", "salesforce", "sf", "completion", "autocomplete"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arcmanagement/kiro-sf-completion"
+  }
+}
