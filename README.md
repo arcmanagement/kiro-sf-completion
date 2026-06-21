@@ -18,14 +18,6 @@ The spec version tracks the Salesforce CLI version — `v2.136.8` of this repo w
 - Enum suggestions for flags like `--test-level`, `--wait`, `--type`, etc.
 - Short aliases (e.g. `-o` for `--target-org`) included
 
-## Versioning
-
-This repo's releases are pinned to the Salesforce CLI version they were generated from.
-
-| Release | SF CLI version |
-|---------|---------------|
-| [v2.136.8](https://github.com/arcmanagement/kiro-sf-completion/releases/tag/v2.136.8) | 2.136.8 |
-
 ## Regenerating (for maintainers)
 
 ```bash
