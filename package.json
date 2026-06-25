@@ -1,6 +1,6 @@
 {
   "name": "kiro-sf-completion",
-  "version": "2.139.6",
+  "version": "2.140.6",
   "description": "Kiro completion spec for Salesforce CLI (sf) \u2014 auto-generated from sf commands --json",
   "keywords": [
     "kiro",

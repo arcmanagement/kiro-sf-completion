@@ -1,7 +1,7 @@
 // Kiro completion spec for Salesforce CLI (sf)
 // Generated from: sf commands --json
-// SF CLI version: 2.139.6
-// Spec version:   2.139.6
+// SF CLI version: 2.140.6
+// Spec version:   2.140.6
 //
 // Installation:
 //   Copy sf.js to your Kiro Specs folder
