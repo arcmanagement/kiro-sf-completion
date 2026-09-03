@@ -1,7 +1,7 @@
 // Kiro completion spec for Salesforce CLI (sf)
 // Generated from: sf commands --json
-// SF CLI version: 2.139.6
-// Spec version:   2.139.6
+// SF CLI version: 2.150.6
+// Spec version:   2.150.6
 //
 // Installation:
 //   Copy sf.js to your Kiro Specs folder
@@ -177,6 +177,37 @@ const completionSpec = {
                   args: {
                     name: "primary-index-field2"
                   }
+                },
+                {
+                  name: "--content-fields",
+                  description: "Comma-separated list of content fields for KNOWLEDGE libraries (optional, mutable after creation).",
+                  args: {
+                    name: "content-fields"
+                  }
+                },
+                {
+                  name: "--data-category-ids",
+                  description: "Comma-separated list of data category selection IDs for KNOWLEDGE libraries. Mutually exclusive with --data-category-names (provide one or the other, not both).",
+                  args: {
+                    name: "data-category-ids"
+                  }
+                },
+                {
+                  name: "--data-category-names",
+                  description: "Comma-separated list of data category names in qualified format (e.g., \"Group_API_Name.Category\"). Mutually exclusive with --data-category-ids (provide one or the other, not both).",
+                  args: {
+                    name: "data-category-names"
+                  }
+                },
+                {
+                  name: [
+                    "--wait",
+                    "-w"
+                  ],
+                  description: "Wait N minutes for indexing to complete (KNOWLEDGE libraries). SFDRIVE libraries require upload before indexing; RETRIEVER libraries are ready immediately.",
+                  args: {
+                    name: "wait"
+                  }
                 }
               ]
             },
@@ -345,6 +376,35 @@ const completionSpec = {
                         name: "library-id"
                       },
                       isRequired: true
+                    },
+                    {
+                      name: "--page-size",
+                      description: "Number of files to return per page (1-200, default 50).",
+                      args: {
+                        name: "page-size"
+                      }
+                    },
+                    {
+                      name: "--offset",
+                      description: "Number of files to skip before returning results (for pagination).",
+                      args: {
+                        name: "offset"
+                      }
+                    },
+                    {
+                      name: "--status",
+                      description: "Filter files by indexing status.",
+                      args: {
+                        name: "status",
+                        suggestions: [
+                          "uploaded",
+                          "indexing",
+                          "indexed",
+                          "index_failed",
+                          "deleting",
+                          "delete_failed"
+                        ]
+                      }
                     }
                   ]
                 }
@@ -456,6 +516,10 @@ const completionSpec = {
                     name: "library-id"
                   },
                   isRequired: true
+                },
+                {
+                  name: "--include-artifacts",
+                  description: "Resolve DC asset artifacts (DataStream, DLO, DMO, SearchIndex, Retriever) with entity IDs and names on each stage. Slower — requires additional queries."
                 }
               ]
             },
@@ -520,6 +584,10 @@ const completionSpec = {
                 {
                   name: "--restrict-to-public-articles",
                   description: "Restrict to public Knowledge articles only (KNOWLEDGE libraries, triggers re-indexing)."
+                },
+                {
+                  name: "--data-category-rule",
+                  description: "Enable or disable data category filtering for KNOWLEDGE libraries. Use --no-data-category-rule to disable."
                 },
                 {
                   name: "--retriever-id",
@@ -954,7 +1022,7 @@ const completionSpec = {
                     "--from-definition",
                     "-d"
                   ],
-                  description: "Filepath to the AIEvaluationDefinition metadata XML file in your DX project that you want to convert to a test spec YAML file.",
+                  description: "Filepath to an AiEvaluationDefinition or AiTestingDefinition metadata XML file in your DX project that you want to convert to a test spec YAML file.",
                   args: {
                     name: "from-definition"
                   }
@@ -968,10 +1036,475 @@ const completionSpec = {
                     "--output-file",
                     "-f"
                   ],
-                  description: "Name of the generated test spec YAML file. Default value is \"specs/<AGENT_API_NAME>-testSpec.yaml\".",
+                  description: "Name of the generated test spec YAML file. Default value is \"specs/<AGENT_API_NAME>-testSpec.yaml\" (legacy) or \"specs/<AGENT_API_NAME>-ngtTestSpec.yaml\" (Agentforce Studio).",
                   args: {
                     name: "output-file",
                     template: "filepaths"
+                  }
+                },
+                {
+                  name: "--test-runner",
+                  description: "Explicitly specify which test runner to use (agentforce-studio or testing-center).",
+                  args: {
+                    name: "test-runner",
+                    suggestions: [
+                      "agentforce-studio",
+                      "testing-center"
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "mcp",
+          subcommands: [
+            {
+              name: "asset",
+              subcommands: [
+                {
+                  name: "list",
+                  description: "List the assets (tools, prompts, and resources) for an MCP server in the catalog.",
+                  options: [
+                    {
+                      name: [
+                        "--target-org",
+                        "-o"
+                      ],
+                      description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                      args: {
+                        name: "target-org",
+                        generators: orgGenerator
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--api-version",
+                      description: "Override the api version used for api requests made by this command",
+                      args: {
+                        name: "api-version"
+                      }
+                    },
+                    {
+                      name: [
+                        "--mcp-server-id",
+                        "-i"
+                      ],
+                      description: "The ID of the MCP server whose assets you want to list.",
+                      args: {
+                        name: "mcp-server-id"
+                      },
+                      isRequired: true
+                    }
+                  ]
+                },
+                {
+                  name: "replace",
+                  description: "Replace the asset set of an MCP server in the API Catalog.",
+                  options: [
+                    {
+                      name: [
+                        "--target-org",
+                        "-o"
+                      ],
+                      description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                      args: {
+                        name: "target-org",
+                        generators: orgGenerator
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--api-version",
+                      description: "Override the api version used for api requests made by this command",
+                      args: {
+                        name: "api-version"
+                      }
+                    },
+                    {
+                      name: [
+                        "--mcp-server-id",
+                        "-i"
+                      ],
+                      description: "ID of the MCP server whose assets you want to replace.",
+                      args: {
+                        name: "mcp-server-id"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--assets",
+                      description: "The desired asset allowlist as a JSON string (or \"-\" to read from stdin). Mutually exclusive with --assets-file.",
+                      args: {
+                        name: "assets"
+                      }
+                    },
+                    {
+                      name: "--assets-file",
+                      description: "Path to a JSON file containing the desired asset allowlist. Mutually exclusive with --assets.",
+                      args: {
+                        name: "assets-file"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "create",
+              description: "Create an MCP server in the API Catalog.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--name",
+                    "-n"
+                  ],
+                  description: "Unique name of the MCP server.",
+                  args: {
+                    name: "name"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--label",
+                  description: "Human-readable label for the MCP server.",
+                  args: {
+                    name: "label"
+                  }
+                },
+                {
+                  name: "--description",
+                  description: "Description of the MCP server.",
+                  args: {
+                    name: "description"
+                  }
+                },
+                {
+                  name: "--server-url",
+                  description: "URL of the external MCP server.",
+                  args: {
+                    name: "server-url"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--auth-type",
+                  description: "Authorization type to use when connecting to the MCP server.",
+                  args: {
+                    name: "auth-type",
+                    suggestions: [
+                      "OAUTH",
+                      "NO_AUTH"
+                    ]
+                  }
+                },
+                {
+                  name: "--identity-provider",
+                  description: "Identity provider to use for OAuth authorization. Required when auth-type is OAUTH.",
+                  args: {
+                    name: "identity-provider"
+                  }
+                },
+                {
+                  name: "--client-id",
+                  description: "OAuth client ID. Required when auth-type is OAUTH.",
+                  args: {
+                    name: "client-id"
+                  }
+                },
+                {
+                  name: "--client-secret",
+                  description: "OAuth client secret. Required when auth-type is OAUTH. Pass \"-\" to read it from stdin (piped) and keep it out of shell history.",
+                  args: {
+                    name: "client-secret"
+                  }
+                },
+                {
+                  name: "--scope",
+                  description: "OAuth scope to request. Required when auth-type is OAUTH.",
+                  args: {
+                    name: "scope"
+                  }
+                }
+              ]
+            },
+            {
+              name: "delete",
+              description: "Delete an MCP server from the API Catalog.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--mcp-server-id",
+                    "-i"
+                  ],
+                  description: "ID of the MCP server to delete.",
+                  args: {
+                    name: "mcp-server-id"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--no-prompt",
+                  description: "Skip the confirmation prompt and delete the MCP server immediately."
+                }
+              ]
+            },
+            {
+              name: "fetch",
+              description: "Fetch the live assets (tools, prompts, resources) advertised by an MCP server.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--mcp-server-id",
+                    "-i"
+                  ],
+                  description: "ID of the MCP server to fetch assets from.",
+                  args: {
+                    name: "mcp-server-id"
+                  },
+                  isRequired: true
+                }
+              ]
+            },
+            {
+              name: "get",
+              description: "Get a single MCP server registered in the API Catalog.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--mcp-server-id",
+                    "-i"
+                  ],
+                  description: "The identifier of the MCP server to retrieve.",
+                  args: {
+                    name: "mcp-server-id"
+                  },
+                  isRequired: true
+                }
+              ]
+            },
+            {
+              name: "list",
+              description: "List the MCP servers registered in the API Catalog.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: "--label",
+                  description: "Filter the MCP servers by label.",
+                  args: {
+                    name: "label"
+                  }
+                },
+                {
+                  name: "--type",
+                  description: "Filter the MCP servers by type.",
+                  args: {
+                    name: "type",
+                    suggestions: [
+                      "EXTERNAL"
+                    ]
+                  }
+                },
+                {
+                  name: "--status",
+                  description: "Filter the MCP servers by connection status. Only ACTIVE and DISCONNECTED are supported as filters.",
+                  args: {
+                    name: "status",
+                    suggestions: [
+                      "ACTIVE",
+                      "DISCONNECTED"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              name: "update",
+              description: "Update an MCP server registered in the API Catalog.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--mcp-server-id",
+                    "-i"
+                  ],
+                  description: "ID of the MCP server to update.",
+                  args: {
+                    name: "mcp-server-id"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--label",
+                  description: "New display label for the MCP server.",
+                  args: {
+                    name: "label"
+                  }
+                },
+                {
+                  name: "--description",
+                  description: "New description for the MCP server.",
+                  args: {
+                    name: "description"
+                  }
+                },
+                {
+                  name: "--server-url",
+                  description: "New endpoint URL of the MCP server.",
+                  args: {
+                    name: "server-url"
+                  }
+                },
+                {
+                  name: "--auth-type",
+                  description: "Authorization type to apply to the MCP server (OAUTH or NO_AUTH).",
+                  args: {
+                    name: "auth-type",
+                    suggestions: [
+                      "OAUTH",
+                      "NO_AUTH"
+                    ]
+                  }
+                },
+                {
+                  name: "--identity-provider",
+                  description: "Identity provider name for OAuth authorization (required when --auth-type is OAUTH).",
+                  args: {
+                    name: "identity-provider"
+                  }
+                },
+                {
+                  name: "--client-id",
+                  description: "OAuth client ID (required when --auth-type is OAUTH).",
+                  args: {
+                    name: "client-id"
+                  }
+                },
+                {
+                  name: "--client-secret",
+                  description: "OAuth client secret (required when --auth-type is OAUTH). Pass \"-\" to read it from stdin (piped) and keep it out of shell history.",
+                  args: {
+                    name: "client-secret"
+                  }
+                },
+                {
+                  name: "--scope",
+                  description: "OAuth scope (required when --auth-type is OAUTH).",
+                  args: {
+                    name: "scope"
                   }
                 }
               ]
@@ -1039,6 +1572,14 @@ const completionSpec = {
             {
               name: "--use-live-actions",
               description: "Use real actions in the org; if not specified, preview uses AI to simulate (mock) actions."
+            },
+            {
+              name: "--context-variables",
+              description: "Session variables for the agent preview session, in the form Name=Value.",
+              args: {
+                name: "context-variables",
+                isVariadic: true
+              }
             }
           ],
           subcommands: [
@@ -1213,6 +1754,14 @@ const completionSpec = {
                 {
                   name: "--simulate-actions",
                   description: "Use AI to simulate action execution instead of calling real actions. Required with --authoring-bundle."
+                },
+                {
+                  name: "--context-variables",
+                  description: "Session variables for the agent preview session, in the form Name=Value.",
+                  args: {
+                    name: "context-variables",
+                    isVariadic: true
+                  }
                 }
               ]
             }
@@ -2855,6 +3404,57 @@ const completionSpec = {
       name: "code-analyzer",
       subcommands: [
         {
+          name: "ast-dump",
+          description: "Dump the Abstract Syntax Tree (AST) for a given source file.",
+          options: [
+            {
+              name: "--file",
+              description: "Path to the source file to parse.",
+              args: {
+                name: "file",
+                template: "filepaths"
+              },
+              isRequired: true
+            },
+            {
+              name: [
+                "--language",
+                "-l"
+              ],
+              description: "Language of the source file.",
+              args: {
+                name: "language",
+                suggestions: [
+                  "apex",
+                  "visualforce",
+                  "html",
+                  "xml",
+                  "javascript"
+                ]
+              }
+            },
+            {
+              name: "--format",
+              description: "Output format for the AST.",
+              args: {
+                name: "format",
+                suggestions: [
+                  "json",
+                  "xml"
+                ]
+              }
+            },
+            {
+              name: "--output-file",
+              description: "Path to the file where the AST output is written.",
+              args: {
+                name: "output-file",
+                template: "filepaths"
+              }
+            }
+          ]
+        },
+        {
           name: "config",
           description: "Output the current state of configuration for Code Analyzer.",
           options: [
@@ -3023,6 +3623,17 @@ const completionSpec = {
               args: {
                 name: "target",
                 isVariadic: true
+              }
+            },
+            {
+              name: [
+                "--target-org",
+                "-o"
+              ],
+              description: "Target org username or alias for remote analysis engines.",
+              args: {
+                name: "target-org",
+                generators: orgGenerator
               }
             },
             {
@@ -3496,6 +4107,10 @@ const completionSpec = {
                     "-t"
                   ],
                   description: "Use Tooling API so you can insert a record in a Tooling API object."
+                },
+                {
+                  name: "--skip-assignment-rules",
+                  description: "Don't apply active assignment rules when creating the record; applies to Account, Case, and Lead records."
                 }
               ]
             }
@@ -4468,6 +5083,10 @@ const completionSpec = {
                     "-t"
                   ],
                   description: "Use Tooling API so you can update a record in a Tooling API object."
+                },
+                {
+                  name: "--skip-assignment-rules",
+                  description: "Don't apply active assignment rules when updating the record; applies to Account, Case, and Lead records."
                 }
               ]
             },
@@ -4801,6 +5420,1404 @@ const completionSpec = {
                 {
                   name: "--dry-run",
                   description: "Display the changes that would be made without writing them to disk."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: "devops",
+      subcommands: [
+        {
+          name: "pipeline",
+          subcommands: [
+            {
+              name: "create",
+              description: "Create a DevOps Center pipeline.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--name",
+                    "-n"
+                  ],
+                  description: "Name of the pipeline.",
+                  args: {
+                    name: "name"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: [
+                    "--repo",
+                    "-r"
+                  ],
+                  description: "URL of an existing repository or the name of a repository to create.",
+                  args: {
+                    name: "repo"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--repo-type",
+                  description: "Type of the source code repository. Required when creating a repository using '--create-repo'.",
+                  args: {
+                    name: "repo-type",
+                    suggestions: [
+                      "github",
+                      "bitbucket"
+                    ]
+                  }
+                },
+                {
+                  name: "--create-repo",
+                  description: "Create a repository if it doesn't exist."
+                },
+                {
+                  name: "--repo-owner",
+                  description: "Owner (organization or user) of the GitHub repository. Required when creating a GitHub repository using '--create-repo'.",
+                  args: {
+                    name: "repo-owner"
+                  }
+                },
+                {
+                  name: "--bitbucket-workspace",
+                  description: "Bitbucket workspace that will own the repository. Required when creating a Bitbucket repository using '--create-repo'.",
+                  args: {
+                    name: "bitbucket-workspace"
+                  }
+                },
+                {
+                  name: "--bitbucket-project-key",
+                  description: "Bitbucket project key to associate with the repository. Optional when creating a Bitbucket repository using '--create-repo'.",
+                  args: {
+                    name: "bitbucket-project-key"
+                  }
+                },
+                {
+                  name: [
+                    "--stage",
+                    "-s"
+                  ],
+                  description: "Name of a pipeline stage, in promotion order. Repeat the flag for each stage. Defaults to Integration, UAT, Staging, and Production.",
+                  args: {
+                    name: "stage",
+                    isVariadic: true
+                  }
+                },
+                {
+                  name: "--project-id",
+                  description: "ID of a project to associate with the pipeline. Repeat the flag to associate multiple projects.",
+                  args: {
+                    name: "project-id",
+                    isVariadic: true
+                  }
+                }
+              ]
+            },
+            {
+              name: "get",
+              description: "Get details of a DevOps Center pipeline including its stages, repositories, and connected projects.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--pipeline-id",
+                    "-i"
+                  ],
+                  description: "ID of the DevOps Center pipeline.",
+                  args: {
+                    name: "pipeline-id"
+                  },
+                  isRequired: true
+                }
+              ]
+            },
+            {
+              name: "list",
+              description: "List DevOps Center pipelines with their stages, repositories, and connected projects.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                }
+              ]
+            },
+            {
+              name: "project",
+              subcommands: [
+                {
+                  name: "add",
+                  description: "Attach a DevOps Center project to a pipeline.",
+                  options: [
+                    {
+                      name: [
+                        "--target-org",
+                        "-o"
+                      ],
+                      description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                      args: {
+                        name: "target-org",
+                        generators: orgGenerator
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--api-version",
+                      description: "Override the api version used for api requests made by this command",
+                      args: {
+                        name: "api-version"
+                      }
+                    },
+                    {
+                      name: "--pipeline-id",
+                      description: "ID of the pipeline.",
+                      args: {
+                        name: "pipeline-id"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--project-id",
+                      description: "ID of the DevOps Center project.",
+                      args: {
+                        name: "project-id"
+                      },
+                      isRequired: true
+                    }
+                  ]
+                },
+                {
+                  name: "delete",
+                  description: "Remove a DevOps Center project's connection to a pipeline.",
+                  options: [
+                    {
+                      name: [
+                        "--target-org",
+                        "-o"
+                      ],
+                      description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                      args: {
+                        name: "target-org",
+                        generators: orgGenerator
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--api-version",
+                      description: "Override the api version used for api requests made by this command",
+                      args: {
+                        name: "api-version"
+                      }
+                    },
+                    {
+                      name: "--pipeline-id",
+                      description: "ID of the pipeline.",
+                      args: {
+                        name: "pipeline-id"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--project-id",
+                      description: "ID of the DevOps Center project.",
+                      args: {
+                        name: "project-id"
+                      },
+                      isRequired: true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "stage",
+              subcommands: [
+                {
+                  name: "add",
+                  description: "Add a stage to a DevOps Center pipeline.",
+                  options: [
+                    {
+                      name: [
+                        "--target-org",
+                        "-o"
+                      ],
+                      description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                      args: {
+                        name: "target-org",
+                        generators: orgGenerator
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--api-version",
+                      description: "Override the api version used for api requests made by this command",
+                      args: {
+                        name: "api-version"
+                      }
+                    },
+                    {
+                      name: "--pipeline-id",
+                      description: "ID of the pipeline where the stage is added.",
+                      args: {
+                        name: "pipeline-id"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: [
+                        "--name",
+                        "-n"
+                      ],
+                      description: "Name of the pipeline stage, such as Integration, UAT, or Staging.",
+                      args: {
+                        name: "name"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--next-stage-id",
+                      description: "ID of the stage that follows the new stage in the pipeline.",
+                      args: {
+                        name: "next-stage-id"
+                      },
+                      isRequired: true
+                    }
+                  ]
+                },
+                {
+                  name: "delete",
+                  description: "Delete a stage from a DevOps Center pipeline.",
+                  options: [
+                    {
+                      name: [
+                        "--target-org",
+                        "-o"
+                      ],
+                      description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                      args: {
+                        name: "target-org",
+                        generators: orgGenerator
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--api-version",
+                      description: "Override the api version used for api requests made by this command",
+                      args: {
+                        name: "api-version"
+                      }
+                    },
+                    {
+                      name: "--pipeline-id",
+                      description: "ID of the pipeline that contains the stage.",
+                      args: {
+                        name: "pipeline-id"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--stage-id",
+                      description: "ID of the stage to delete.",
+                      args: {
+                        name: "stage-id"
+                      },
+                      isRequired: true
+                    }
+                  ]
+                },
+                {
+                  name: "update",
+                  description: "Update a DevOps Center pipeline stage.",
+                  options: [
+                    {
+                      name: [
+                        "--target-org",
+                        "-o"
+                      ],
+                      description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                      args: {
+                        name: "target-org",
+                        generators: orgGenerator
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--api-version",
+                      description: "Override the api version used for api requests made by this command",
+                      args: {
+                        name: "api-version"
+                      }
+                    },
+                    {
+                      name: [
+                        "--stage-id",
+                        "-s"
+                      ],
+                      description: "ID of the pipeline stage to update.",
+                      args: {
+                        name: "stage-id"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: [
+                        "--name",
+                        "-n"
+                      ],
+                      description: "New name for the pipeline stage.",
+                      args: {
+                        name: "name"
+                      },
+                      isRequired: true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "update",
+              description: "Update a DevOps Center pipeline.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: "--pipeline-id",
+                  description: "ID of the pipeline.",
+                  args: {
+                    name: "pipeline-id"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--activate",
+                  description: "Activate the pipeline. Can't be used with --deactivate."
+                },
+                {
+                  name: "--deactivate",
+                  description: "Deactivate the pipeline. Can't be used with --activate."
+                },
+                {
+                  name: [
+                    "--name",
+                    "-n"
+                  ],
+                  description: "New name for the pipeline.",
+                  args: {
+                    name: "name"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "project",
+          subcommands: [
+            {
+              name: "create",
+              description: "Create a DevOps Center project in a DevOps Center org.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--name",
+                    "-n"
+                  ],
+                  description: "Name of the new DevOps Center project.",
+                  args: {
+                    name: "name"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: [
+                    "--description",
+                    "-d"
+                  ],
+                  description: "Description of the new project; if not specified, the description is blank.",
+                  args: {
+                    name: "description"
+                  }
+                }
+              ]
+            },
+            {
+              name: "list",
+              description: "List all DevOps Center projects in a Salesforce org.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                }
+              ]
+            },
+            {
+              name: "update",
+              description: "Update a DevOps Center project.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--project-id",
+                    "-i"
+                  ],
+                  description: "ID of the DevOps Center project to update.",
+                  args: {
+                    name: "project-id"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: [
+                    "--name",
+                    "-n"
+                  ],
+                  description: "New name for the project.",
+                  args: {
+                    name: "name"
+                  }
+                },
+                {
+                  name: [
+                    "--description",
+                    "-d"
+                  ],
+                  description: "New description for the project.",
+                  args: {
+                    name: "description"
+                  }
+                },
+                {
+                  name: "--is-active",
+                  description: "Set the project active status. Use --is-active to activate or --no-is-active to deactivate."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "promote",
+          description: "Promote work items or a pipeline stage to a target pipeline stage.",
+          options: [
+            {
+              name: [
+                "--target-org",
+                "-o"
+              ],
+              description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+              args: {
+                name: "target-org",
+                generators: orgGenerator
+              },
+              isRequired: true
+            },
+            {
+              name: "--api-version",
+              description: "Override the api version used for api requests made by this command",
+              args: {
+                name: "api-version"
+              }
+            },
+            {
+              name: [
+                "--target-stage-id",
+                "-t"
+              ],
+              description: "ID of the pipeline stage to promote to.",
+              args: {
+                name: "target-stage-id"
+              },
+              isRequired: true
+            },
+            {
+              name: [
+                "--work-item-id",
+                "-i"
+              ],
+              description: "ID of the work item to promote. Mutually exclusive with --stage-id.",
+              args: {
+                name: "work-item-id",
+                isVariadic: true
+              }
+            },
+            {
+              name: [
+                "--stage-id",
+                "-s"
+              ],
+              description: "ID of the source pipeline stage whose approved work items will be promoted. Mutually exclusive with --work-item-id.",
+              args: {
+                name: "stage-id"
+              }
+            },
+            {
+              name: [
+                "--deploy-all",
+                "-a"
+              ],
+              description: "Deploy all metadata in the branch to the stage's org."
+            },
+            {
+              name: [
+                "--test-level",
+                "-l"
+              ],
+              description: "Deployment Apex testing level.",
+              args: {
+                name: "test-level",
+                suggestions: [
+                  "NoTestRun",
+                  "RunSpecifiedTests",
+                  "RunLocalTests",
+                  "RunAllTestsInOrg"
+                ]
+              }
+            },
+            {
+              name: "--tests",
+              description: "Apex tests to run when --test-level is RunSpecifiedTests.",
+              args: {
+                name: "tests",
+                isVariadic: true
+              }
+            },
+            {
+              name: "--skip-validation",
+              description: "Skip pre-promote validation. By default, promotion is validated before proceeding to prevent promoting work items without an associated PR. Use this flag to bypass validation."
+            }
+          ]
+        },
+        {
+          name: "promotion",
+          subcommands: [
+            {
+              name: "complete",
+              description: "Deploy undeployed work items to a pipeline stage org.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--target-stage-id",
+                    "-t"
+                  ],
+                  description: "ID of the out-of-sync pipeline stage to deploy to.",
+                  args: {
+                    name: "target-stage-id"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: [
+                    "--work-item-id",
+                    "-i"
+                  ],
+                  description: "ID of a specific work item to deploy. Omit to deploy all undeployed work items for the stage. Use this for the first stage of a pipeline where no source stage exists.",
+                  args: {
+                    name: "work-item-id",
+                    isVariadic: true
+                  }
+                },
+                {
+                  name: [
+                    "--deploy-all",
+                    "-a"
+                  ],
+                  description: "Deploy all metadata in the branch to the stage's org."
+                },
+                {
+                  name: [
+                    "--test-level",
+                    "-l"
+                  ],
+                  description: "Deployment Apex testing level.",
+                  args: {
+                    name: "test-level",
+                    suggestions: [
+                      "NoTestRun",
+                      "RunSpecifiedTests",
+                      "RunLocalTests",
+                      "RunAllTestsInOrg"
+                    ]
+                  }
+                },
+                {
+                  name: "--tests",
+                  description: "Apex tests to run when --test-level is RunSpecifiedTests.",
+                  args: {
+                    name: "tests",
+                    isVariadic: true
+                  }
+                }
+              ]
+            },
+            {
+              name: "validate",
+              description: "Validate work item promotion for a pipeline stage.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--target-stage-id",
+                    "-t"
+                  ],
+                  description: "ID of the target pipeline stage to validate promotion to.",
+                  args: {
+                    name: "target-stage-id"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: [
+                    "--work-item-id",
+                    "-i"
+                  ],
+                  description: "ID of a work item to validate for promotion. Specify multiple times for multiple work items.",
+                  args: {
+                    name: "work-item-id",
+                    isVariadic: true
+                  },
+                  isRequired: true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "request",
+          subcommands: [
+            {
+              name: "status",
+              description: "Get the status of a request.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--request-token",
+                    "-i"
+                  ],
+                  description: "Request token from the promote response.",
+                  args: {
+                    name: "request-token"
+                  },
+                  isRequired: true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "review",
+          subcommands: [
+            {
+              name: "create",
+              description: "Create a pull request for a work item branch.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--work-item-name",
+                    "-n"
+                  ],
+                  description: "Name of the work item, such as WI-000001.",
+                  args: {
+                    name: "work-item-name"
+                  }
+                },
+                {
+                  name: [
+                    "--work-item-id",
+                    "-w"
+                  ],
+                  description: "ID of the work item.",
+                  args: {
+                    name: "work-item-id"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "stage",
+          subcommands: [
+            {
+              name: "branch",
+              subcommands: [
+                {
+                  name: "add",
+                  description: "Add a source code repository branch to a pipeline stage.",
+                  options: [
+                    {
+                      name: [
+                        "--target-org",
+                        "-o"
+                      ],
+                      description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                      args: {
+                        name: "target-org",
+                        generators: orgGenerator
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--api-version",
+                      description: "Override the api version used for api requests made by this command",
+                      args: {
+                        name: "api-version"
+                      }
+                    },
+                    {
+                      name: "--pipeline-id",
+                      description: "ID of the pipeline that contains the stage.",
+                      args: {
+                        name: "pipeline-id"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--stage-id",
+                      description: "ID of the pipeline stage to associate the branch with.",
+                      args: {
+                        name: "stage-id"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: [
+                        "--branch-name",
+                        "-b"
+                      ],
+                      description: "Name of the repository branch to assign to the stage.",
+                      args: {
+                        name: "branch-name"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--create-vcs-branch",
+                      description: "Create the branch in the remote repository if it doesn't already exist."
+                    }
+                  ]
+                },
+                {
+                  name: "delete",
+                  description: "Delete the source code repository branch associated with a pipeline stage.",
+                  options: [
+                    {
+                      name: [
+                        "--target-org",
+                        "-o"
+                      ],
+                      description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                      args: {
+                        name: "target-org",
+                        generators: orgGenerator
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--api-version",
+                      description: "Override the api version used for api requests made by this command",
+                      args: {
+                        name: "api-version"
+                      }
+                    },
+                    {
+                      name: "--pipeline-id",
+                      description: "ID of the pipeline that contains the stage. Used to verify the pipeline is inactive before deleting.",
+                      args: {
+                        name: "pipeline-id"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--stage-id",
+                      description: "ID of the pipeline stage whose branch you want to delete.",
+                      args: {
+                        name: "stage-id"
+                      },
+                      isRequired: true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              name: "environment",
+              subcommands: [
+                {
+                  name: "add",
+                  description: "Add a Salesforce environment to a pipeline stage.",
+                  options: [
+                    {
+                      name: [
+                        "--target-org",
+                        "-o"
+                      ],
+                      description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                      args: {
+                        name: "target-org",
+                        generators: orgGenerator
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--api-version",
+                      description: "Override the api version used for api requests made by this command",
+                      args: {
+                        name: "api-version"
+                      }
+                    },
+                    {
+                      name: "--pipeline-id",
+                      description: "ID of the pipeline that contains the stage.",
+                      args: {
+                        name: "pipeline-id"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--stage-id",
+                      description: "ID of the pipeline stage.",
+                      args: {
+                        name: "stage-id"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: [
+                        "--environment-name",
+                        "-e"
+                      ],
+                      description: "Name of the environment.",
+                      args: {
+                        name: "environment-name"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--org-type",
+                      description: "Type of the Salesforce org. Valid values: Production, Sandbox.",
+                      args: {
+                        name: "org-type",
+                        suggestions: [
+                          "Production",
+                          "Sandbox"
+                        ]
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--no-browser",
+                      description: "Don't auto-open the browser for OAuth authentication. The redirect URL is printed for manual use."
+                    }
+                  ]
+                },
+                {
+                  name: "delete",
+                  description: "Delete an environment from a DevOps Center pipeline stage.",
+                  options: [
+                    {
+                      name: [
+                        "--target-org",
+                        "-o"
+                      ],
+                      description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                      args: {
+                        name: "target-org",
+                        generators: orgGenerator
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: "--api-version",
+                      description: "Override the api version used for api requests made by this command",
+                      args: {
+                        name: "api-version"
+                      }
+                    },
+                    {
+                      name: "--pipeline-id",
+                      description: "ID of the pipeline. Used to verify the pipeline is inactive before deleting.",
+                      args: {
+                        name: "pipeline-id"
+                      },
+                      isRequired: true
+                    },
+                    {
+                      name: [
+                        "--environment-id",
+                        "-e"
+                      ],
+                      description: "ID of the environment to delete.",
+                      args: {
+                        name: "environment-id"
+                      },
+                      isRequired: true
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "work-item",
+          subcommands: [
+            {
+              name: "combine",
+              description: "Prepare work items to be combined for custom promotion.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: "--parent-work-item-id",
+                  description: "ID of the parent work item.",
+                  args: {
+                    name: "parent-work-item-id"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--child-work-item-id",
+                  description: "ID of a work item to combine.",
+                  args: {
+                    name: "child-work-item-id",
+                    isVariadic: true
+                  },
+                  isRequired: true
+                },
+                {
+                  name: [
+                    "--target-stage-id",
+                    "-t"
+                  ],
+                  description: "ID of the pipeline stage to promote the combined work item to.",
+                  args: {
+                    name: "target-stage-id"
+                  },
+                  isRequired: true
+                }
+              ]
+            },
+            {
+              name: "create",
+              description: "Create a new work item in a DevOps Center project.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--project-id",
+                    "-p"
+                  ],
+                  description: "ID of the DevOps Center project to create the work item in.",
+                  args: {
+                    name: "project-id"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: [
+                    "--subject",
+                    "-s"
+                  ],
+                  description: "Subject (title) of the new work item.",
+                  args: {
+                    name: "subject"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: [
+                    "--description",
+                    "-d"
+                  ],
+                  description: "Description of the new work item; if not specified, the description is blank.",
+                  args: {
+                    name: "description"
+                  }
+                }
+              ]
+            },
+            {
+              name: "list",
+              description: "List all work items for a DevOps Center project.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--project-id",
+                    "-p"
+                  ],
+                  description: "ID of the DevOps Center project to list work items for.",
+                  args: {
+                    name: "project-id"
+                  },
+                  isRequired: true
+                }
+              ]
+            },
+            {
+              name: "prepare",
+              description: "Prepare a work item for one-off promotion between pipeline stages.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--work-item-id",
+                    "-i"
+                  ],
+                  description: "ID of the work item to prepare for one-off promotion.",
+                  args: {
+                    name: "work-item-id"
+                  },
+                  isRequired: true
+                },
+                {
+                  name: [
+                    "--target-stage-id",
+                    "-t"
+                  ],
+                  description: "ID of the pipeline stage to promote the work item to.",
+                  args: {
+                    name: "target-stage-id"
+                  },
+                  isRequired: true
+                }
+              ]
+            },
+            {
+              name: "update",
+              description: "Update a work item in DevOps Center.",
+              options: [
+                {
+                  name: [
+                    "--target-org",
+                    "-o"
+                  ],
+                  description: "Username or alias of the target org. Not required if the `target-org` configuration variable is already set.",
+                  args: {
+                    name: "target-org",
+                    generators: orgGenerator
+                  },
+                  isRequired: true
+                },
+                {
+                  name: "--api-version",
+                  description: "Override the api version used for api requests made by this command",
+                  args: {
+                    name: "api-version"
+                  }
+                },
+                {
+                  name: [
+                    "--work-item-name",
+                    "-n"
+                  ],
+                  description: "Name of the work item, such as WI-000001.",
+                  args: {
+                    name: "work-item-name"
+                  }
+                },
+                {
+                  name: [
+                    "--work-item-id",
+                    "-w"
+                  ],
+                  description: "ID of the work item.",
+                  args: {
+                    name: "work-item-id"
+                  }
+                },
+                {
+                  name: "--subject",
+                  description: "New subject for the work item.",
+                  args: {
+                    name: "subject"
+                  }
+                },
+                {
+                  name: "--description",
+                  description: "New description for the work item.",
+                  args: {
+                    name: "description"
+                  }
+                },
+                {
+                  name: "--status",
+                  description: "New status for the work item. Allowed values: \"In Progress\", \"Ready to Promote\".",
+                  args: {
+                    name: "status",
+                    suggestions: [
+                      "In Progress",
+                      "Ready to Promote"
+                    ]
+                  }
                 }
               ]
             }
@@ -6742,7 +8759,7 @@ const completionSpec = {
                     "--length",
                     "-l"
                   ],
-                  description: "Number of characters in the generated password; valid values are between 20 and 100. Default value is 20.",
+                  description: "Number of characters in the generated password; valid values are between 20 and 1000. Default value is 20.",
                   args: {
                     name: "length"
                   }
@@ -8962,6 +10979,16 @@ const completionSpec = {
                     name: "package"
                   },
                   isRequired: true
+                },
+                {
+                  name: [
+                    "--installation-key",
+                    "-k"
+                  ],
+                  description: "Installation key for a key-protected package version (starts with 04t).",
+                  args: {
+                    name: "installation-key"
+                  }
                 },
                 {
                   name: "--edge-direction",
@@ -11502,6 +13529,18 @@ const completionSpec = {
                   }
                 },
                 {
+                  name: "--root-type-with-dependencies",
+                  description: "Metadata type whose dependent types should also be retrieved.",
+                  args: {
+                    name: "root-type-with-dependencies",
+                    suggestions: [
+                      "Bot",
+                      "AiAgentDefinitionVersion"
+                    ],
+                    isVariadic: true
+                  }
+                },
+                {
                   name: [
                     "--output-dir",
                     "-r"
@@ -11860,8 +13899,10 @@ const completionSpec = {
                           "ApexException",
                           "ApexUnitTest",
                           "BasicUnitTest",
+                          "Batchable",
                           "DefaultApexClass",
-                          "InboundEmailService"
+                          "InboundEmailService",
+                          "Queueable"
                         ]
                       }
                     },
@@ -12429,6 +14470,8 @@ const completionSpec = {
                       "analytics",
                       "reactinternalapp",
                       "reactexternalapp",
+                      "angularinternalapp",
+                      "angularexternalapp",
                       "agent"
                     ]
                   }
@@ -12535,7 +14578,7 @@ const completionSpec = {
             },
             {
               name: "ui-bundle",
-              description: "Generate a UI bundle, which contains the code and metadata to build a UI experience that uses non-native Salesforce frameworks, such as React.",
+              description: "Generate a UI bundle, which contains the code and metadata to build a UI experience that uses non-native Salesforce frameworks, such as React or Angular.",
               options: [
                 {
                   name: [
@@ -12558,7 +14601,8 @@ const completionSpec = {
                     name: "template",
                     suggestions: [
                       "default",
-                      "reactbasic"
+                      "reactbasic",
+                      "angularbasic"
                     ]
                   }
                 },
