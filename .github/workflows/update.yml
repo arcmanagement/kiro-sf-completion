@@ -77,4 +77,3 @@ jobs:
 
             Merging this PR will automatically create the GitHub Release.
           commit-message: "sf ${{ steps.version.outputs.sf_version }}"
-          labels: automated
